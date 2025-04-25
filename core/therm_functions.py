@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 """
-Created on Fri Apr 26 08:56:53 2024
-
-@author: felix
+Title: therm_functions.py
+Project: THERMAT - Thermal Analysis Tool for Rocket Engine Thrust Chambers
+Author: @flxbrt
+Version: 2.0
 """
 
 
