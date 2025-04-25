@@ -46,7 +46,6 @@ This tool will
 - Perform a thermal analysis and compute heat fluxes and temperatures (either fixed wall or regenerative cooling)
 - Output plots and performance metrics such as absorbed heat and coolant heat capacity
 
-![Wall Temperatures and Heat Fluxes computed for axially discretisated Chamber Wall](docs/Heat_Transfer_and_Discretizaztion_Regenerative_Cooling.png)
 
 ---
 
