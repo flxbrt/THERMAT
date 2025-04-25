@@ -1,4 +1,4 @@
-# THERMAT – Thermal Analysis Tool for Rocket Engine Thrust Chambers
+# 🚀 THERMAT – Thermal Analysis Tool for Rocket Engine Thrust Chambers
 
 **THERMAT** is a Python-based tool designed to analyze heat transport in rocket engine combustion chambers and to support the design of regenerative cooling systems. 
 
@@ -9,7 +9,13 @@ It uses **Cantera** for chemical equilibrium and flow calculations, and **CoolPr
 ## 📁 Project Structure
 
 ```plaintext
-thermat/ ├── main.py # Entry point: runs thermal analysis ├── README.md # Project documentation ├── requirements.txt # Dependencies └── core/ ├── therm_functions.py # Main functions for geometry, flow, and thermal analysis └── ... # (Other future modules or helpers)
+thermat/
+├── main.py                  # Entry point: runs thermal analysis
+├── core/              
+│   ├── therm_functions.py	 # Main functions for geometry, flow, and thermal analysi
+├── utilities/		           # Additional scripts not required for the core functionality
+├── README.md
+├── requirements.txt
 ```
 
 ---
