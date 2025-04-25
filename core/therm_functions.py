@@ -214,18 +214,6 @@ def plot_geometry(geometry, config):
         plt.xlabel('Chamber X-Coordinate [mm]')
         plt.ylabel('Channel height [m]')
     
-# def plot_geometry(geometry):
-    
-#     axial = geometry['1D']['axial']['array']
-#     radial = geometry['1D']['radial']['array']
-    
-#     plt.plot(axial*1000, radial*1000, color='black')
-#     plt.plot(axial*1000, -radial*1000, color='black')
-#     plt.grid()
-#     plt.xlabel('Chamber X-Coordinate [mm]')
-#     plt.ylabel('Chamber Radius [mm]')
-#     plt.axis('equal')
-
 def calc_discretized_cooling_geometry(config, geometry):
     
     axial = geometry['1D']['axial']['array']
@@ -236,7 +224,8 @@ def calc_discretized_cooling_geometry(config, geometry):
     tl = config['cooling']['tl']['Value'] # thickness between hot gas side and coolant side
     tc = config['cooling']['tc']['Value'] # channel seperator width
     
-    if len(h)==1:
+    if type(h)==float or type(h)==int:
+        h = [h]
         h = np.ones(len(axial))*h[0]
     
     # feasibility check, whether wall thickness between cooling channels is narrow enough
@@ -386,18 +375,9 @@ def calc_discretized_cooling_geometry(config, geometry):
     geometry['1D']['height'] = {'array': h, 'Description': 'channel height [m]'}
 
     return geometry
-
+    
 #%% thermal analyis
     
-# def set_combustion(p, fuel_ct, fuel_cp, ox, T_fuel, T_ox, ROF):
-    
-#     comb = ct.Solution('gri30_WARR.yaml')
-#     # comb = ct.Solution('gri30_WARR.yaml')
-#     comb.Y = {fuel_ct: 1, ox: ROF}
-#     comb.TP = 273, p
-#     comb.equilibrate('HP')
-#     return comb
-
 def set_combustion(p, fuel_ct, fuel_cp, ox, T_fuel, T_ox, ROF):
     def get_delta_h(injec_t, ref_t, p, fluid):
         
@@ -836,6 +816,48 @@ def solve_cooling_constant_wall(config, geometry, fluid):
     Q_dot_array = np.zeros(len(area_wetted_hg))
     q_dot_array = np.zeros(len(area_wetted_hg))
 
+    #%% casadi implementation
+    # opti = ca.Opti()
+    
+    # s = opti.variable(4*len(area_wetted_hg))
+    # # s[0] --> hg
+    # # s[1] --> hg without sigma
+    # # s[2] --> sigma
+    # # s[3] --> Q_dot
+    
+    # for index in range(len(area_wetted_hg)):
+    #     # hg
+    #     opti.subject_to(s[index*4] - s[index*4+1]*s[index*4+2]== 0)
+    #     # hg without sigma
+    #     opti.subject_to(s[index*4+1] - (C / (d_th**0.2)) * ((mu_hg_array[index]**0.2 * Cp_hg_array[index])/(Pr_hg_array[index]**0.6)) * ((p_hg_array[index] / c_star)**0.8) * ((A_star / area_cross_hg[index])**0.9) == 0)
+    #     # sigma
+    #     opti.subject_to(s[index*4+2] - (1 / (((((1 / 2) * (T_wall / T0) * (1 + (((gamma_hg_array[index] - 1) / 2) * Ma_array[index]**2))) + (1 / 2))**(0.8 - (omega / 5))) * ((1 + (((gamma_hg_array[index] - 1) / 2) * Ma_array[index]**2))**(omega / 5)))) == 0)
+    #     # Q_dot
+    #     opti.subject_to(s[index*4+3] - area_wetted_hg[index]*s[index*4]*(T_aw_array[index]-T_wall) == 0)
+        
+    #     # # hg implemented in the old way, where transport properties are used from stagnation conditions
+    #     # opti.subject_to(s[index*4] - s[index*4+1]*s[index*4+2]== 0)
+    #     # # hg without sigma
+    #     # opti.subject_to(s[index*4+1] - (C / (d_th**0.2)) * ((mu_hg_array[0]**0.2 * Cp_hg_array[0])/(Pr_hg_array[0]**0.6)) * ((p_chamber / c_star)**0.8) * ((A_star / area_cross_hg[index])**0.9) == 0)
+    #     # # sigma
+    #     # opti.subject_to(s[index*4+2] - (1 / (((((1 / 2) * (T_wall / T0) * (1 + (((gamma_hg_array[0] - 1) / 2) * Ma_array[index]**2))) + (1 / 2))**(0.8 - (omega / 5))) * ((1 + (((gamma_hg_array[0] - 1) / 2) * Ma_array[index]**2))**(omega / 5)))) == 0)
+    #     # # Q_dot
+    #     # opti.subject_to(s[index*4+3] - area_wetted_hg[index]*s[index*4]*(T_aw_array[index]-T_wall) == 0)
+    
+    # opts = {'ipopt.print_level':0, 'print_time':0}
+    # opti.solver('ipopt', opts)
+
+    # sol = opti.solve()
+    # params = opti.value(s)
+    
+    # for index in range(len(area_wetted_hg)):
+    #     hg_array[index] = params[4*index]
+    #     Q_dot_array[index] = params[4*index + 3]
+    #     q_dot_array[index] = params[4*index]*(T_aw_array[index]-T_wall) # macht kein sinn!
+    #     q_dot_array[index] = params[4*index]/area_wetted_hg[index] # stattdessen
+    
+    #%% manual implementation
+    
     gamma = gamma_hg_array[0]
     mu = mu_hg_array[0]
     cp = Cp_hg_array[0]
@@ -856,12 +878,13 @@ def solve_cooling_constant_wall(config, geometry, fluid):
         fac = (d_th/(1.5*d_th))**0.1
         hg = (C / (d_th**0.2)) * ((mu**0.2 * cp)/(Pr**0.6)) * ((p_hg / c_star)**0.8) * ((A_star / area_cross_hg[index])**0.9) * sigma # * fac
         
-        # hg *= 2/3
-        
         hg_array[index] = hg
         
         Q_dot_array[index] = hg*area_wetted_hg[index]*(T_aw_array[index] - T_w)
         q_dot_array[index] = hg*(T_aw_array[index] - T_w)
+    
+    
+    #%% 
     
     fluid['combustion']['frozen']['hg'] = {'array': hg_array, 'Description': 'heat transfer coefficient hot gas side [W/m^2/K]'}
     fluid['combustion']['frozen']['T_aw'] = {'array': T_aw_array, 'Description': 'adiabatic wall temperature [K]'}
@@ -1538,50 +1561,6 @@ def obtain_heat_of_combustion(config):
     
     return heizwert*m_dot_ethanol*1000 # [kW]
     
-    
-# theoretically the following function should result in the correct energy release
-# however since cantera uses HP to come up with the chemical equilibrium, the enthalpies before and after the reaction are equivalent --> results is thereofre 0
-# def obtain_heat_of_combustion(config, fluid, water='gas'):
-#     # does not account for liquid injection
-#     # ROF_stoichiometric = 2.09
-#     fuel_ct = config['load point']['fuel_ct']['Value']
-#     ROF = config['load point']['ROF']['Value']
-#     comb_before_reaction = ct.Solution('gri30_WARR.yaml')
-#     comb_before_reaction.Y = {fuel_ct: 1, 'O2': ROF}
-#     reactants = comb_before_reaction.species_names
-#     mole_fractions_reactants = comb_before_reaction.X
-    
-#     comb = fluid['combustion']['ct object']['object']
-#     products = comb.species_names
-#     mole_fractions_products = comb.X
-    
-#     t_ref = 298.15
-#     deltaH_reaction = 0
-#     for species in reactants:
-#         index = reactants.index(species)
-#         # outputs kJ/mole when considering /1e6
-#         # Si unit is J/kmole
-#         deltaH_reaction -= mole_fractions_reactants[index]*comb.species(species).thermo.h(t_ref)/1e6
-    
-#     for species in products:
-#         index = reactants.index(species)
-#         # outputs kJ/mole when considering /1e6
-#         # Si unit is J/kmole
-#         deltaH_reaction += mole_fractions_reactants[index]*comb.species(species).thermo.h(t_ref)/1e6
-    
-#     # convert into kJ/kg
-#     molar_mass_ethanol = 46
-#     deltaH_reaction = deltaH_reaction*molar_mass_ethanol*1000
-    
-#     m_dot = config['load point']['m_dot']['Value']
-#     m_dot_ethanol = 1/(1+ROF)*m_dot
-    
-#     # in kJ
-#     heat_released = m_dot_ethanol*deltaH_reaction
-    
-#     return heat_released    
-    
-
 def obtain_heat_absorbed(fluid):
     Q_dot = sum(fluid['cooling']['Q_dot']['array'])
     return Q_dot
@@ -1682,5 +1661,3 @@ def plot_constant_wall(geometry, fluid):
     plt.xlabel('Distance from faceplate [mm]')
     plt.ylabel('Relaminsarisation Factor [-]')
     plt.grid()
-    
-    
