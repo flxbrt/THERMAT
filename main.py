@@ -25,14 +25,56 @@ import core.therm_functions as tfc
 
 # Define full system configuration for the chamber, cooling, and load point
 # Includes geometry, fluid properties, and model settings
+# config = {
+#     'ID': 'Hopper 223kg full thrust',
+#     'chamber': {
+#         'd_th': {'Value': 37e-3, 'Description': 'Throat Diameter [m]'},
+#         'l_star': {'Value': 1, 'Description': 'Characteristic Chamber Length [m]'},
+#         'alpha': {'Value': 30, 'Description': 'Half angle Convergent section [°]'},
+#         'beta': {'Value': 15, 'Description': 'Half angle Divergent section [°]'},
+#         'epsilon_c': {'Value': 8, 'Description': 'Contraction Ratio [-]'},
+#         'epsilon_e': {'Value': 3, 'Description': 'Expansion Ratio [-]'}
+#     },
+#     'cooling': {
+#         'N': {'Value': 50, 'Description': 'Number of channels [-]'},
+#         'h': {'Value': 0.8e-3, 'Description': 'Channel height [m]'},
+#         'tc': {'Value': 1.5e-3, 'Description': 'Wall thickness circumferentially [m]'},
+#         'tl': {'Value': 1e-3, 'Description': 'Wall thickness liner [m]'},
+#         'lam': {'Value': 25, 'Description': 'Wall material thermal conductivity [W/m/K]'},
+#         'p_inlet': {'Value': 40e5, 'Description': 'Coolant inlet pressure [Pa]'},
+#         'T_wall': {'Value': 700, 'Description': 'Fixed wall temperature if used [K]'},
+#         'T_inlet': {'Value': 293, 'Description': 'Coolant inlet temperature [K]'},
+#         'fin_efficiency': {'Value': True, 'Description': 'Whether to consider fin efficiency'}
+#     },
+#     'nodes': {'Value': 100, 'Description': 'Number of axial nodes [-]'},
+#     'load point': {
+#         'p_c': {'Value': 20e5, 'Description': 'Chamber pressure [Pa]'},
+#         'ROF': {'Value': 3, 'Description': 'Oxidizer-to-fuel ratio [-]'},
+#         'm_dot': {'Value': 1.45, 'Description': 'Mass flow rate [kg/s]'},
+#         'T_oxidizer': {'Value': 293, 'Description': 'Oxidizer injection temperature [K]'},
+#         'T_fuel': {'Value': 293, 'Description': 'Fuel injection temperature [K]'},
+#         'oxidizer': {'Value': 'N2O', 'Description': 'Oxidizer chemical formula'},
+#         'fuel_cp': {'Value': 'C2H6O', 'Description': 'Fuel formula (CoolProp)'},
+#         'fuel_ct': {'Value': 'C2H5OH', 'Description': 'Fuel formula (Cantera)'}
+#     },
+#     'settings': {
+#         'direction': {'Value': 'counter', 'Description': 'Flow direction of coolant (co/counter)'},
+#         'thermal type': {'Value': 'fix', 'Description': '"fix" uses constant wall temperature'},
+#         'flow type': {
+#             'Types': ['frozen'],
+#             'Description': 'Frozen/equilibrium chemistry assumptions for flow'
+#         }
+#     }
+# }
+
 config = {
-    'ID': 'Hopper 223kg full thrust',
+    'ID': 'Pintle High Load Point',
     'chamber': {
-        'd_th': {'Value': 37e-3, 'Description': 'Throat Diameter [m]'},
-        'l_star': {'Value': 1, 'Description': 'Characteristic Chamber Length [m]'},
-        'alpha': {'Value': 30, 'Description': 'Half angle Convergent section [°]'},
+        'd_th': {'Value': 0.03563152896630277, 'Description': 'Throat Diameter [m]'},
+        'l_star': {'Value': 2, 'Description': 'Characteristic Chamber Length [m]'},
+        'alpha': {'Value': 45, 'Description': 'Half angle Convergent section [°]'},
         'beta': {'Value': 15, 'Description': 'Half angle Divergent section [°]'},
-        'epsilon_c': {'Value': 8, 'Description': 'Contraction Ratio [-]'},
+        'epsilon_c': {'Value': 15.44, 'Description': 'Contraction Ratio [-]'},
         'epsilon_e': {'Value': 3, 'Description': 'Expansion Ratio [-]'}
     },
     'cooling': {
@@ -49,11 +91,11 @@ config = {
     'nodes': {'Value': 100, 'Description': 'Number of axial nodes [-]'},
     'load point': {
         'p_c': {'Value': 20e5, 'Description': 'Chamber pressure [Pa]'},
-        'ROF': {'Value': 3, 'Description': 'Oxidizer-to-fuel ratio [-]'},
-        'm_dot': {'Value': 1.45, 'Description': 'Mass flow rate [kg/s]'},
-        'T_oxidizer': {'Value': 293, 'Description': 'Oxidizer injection temperature [K]'},
-        'T_fuel': {'Value': 293, 'Description': 'Fuel injection temperature [K]'},
-        'oxidizer': {'Value': 'N2O', 'Description': 'Oxidizer chemical formula'},
+        'ROF': {'Value': 1.17, 'Description': 'Oxidizer-to-fuel ratio [-]'},
+        'm_dot': {'Value': 1.2551501159552974, 'Description': 'Mass flow rate [kg/s]'},
+        'T_oxidizer': {'Value': 100, 'Description': 'Oxidizer injection temperature [K]'},
+        'T_fuel': {'Value': 400, 'Description': 'Fuel injection temperature [K]'},
+        'oxidizer': {'Value': 'O2', 'Description': 'Oxidizer chemical formula'},
         'fuel_cp': {'Value': 'C2H6O', 'Description': 'Fuel formula (CoolProp)'},
         'fuel_ct': {'Value': 'C2H5OH', 'Description': 'Fuel formula (Cantera)'}
     },
@@ -66,6 +108,48 @@ config = {
         }
     }
 }
+
+# config = {
+#     'ID': 'Pintle Low Load Point',
+#     'chamber': {
+#         'd_th': {'Value': 0.03563152896630277, 'Description': 'Throat Diameter [m]'},
+#         'l_star': {'Value': 2, 'Description': 'Characteristic Chamber Length [m]'},
+#         'alpha': {'Value': 45, 'Description': 'Half angle Convergent section [°]'},
+#         'beta': {'Value': 15, 'Description': 'Half angle Divergent section [°]'},
+#         'epsilon_c': {'Value': 15.44, 'Description': 'Contraction Ratio [-]'},
+#         'epsilon_e': {'Value': 3, 'Description': 'Expansion Ratio [-]'}
+#     },
+#     'cooling': {
+#         'N': {'Value': 50, 'Description': 'Number of channels [-]'},
+#         'h': {'Value': 0.8e-3, 'Description': 'Channel height [m]'},
+#         'tc': {'Value': 1.5e-3, 'Description': 'Wall thickness circumferentially [m]'},
+#         'tl': {'Value': 1e-3, 'Description': 'Wall thickness liner [m]'},
+#         'lam': {'Value': 25, 'Description': 'Wall material thermal conductivity [W/m/K]'},
+#         'p_inlet': {'Value': 40e5, 'Description': 'Coolant inlet pressure [Pa]'},
+#         'T_wall': {'Value': 700, 'Description': 'Fixed wall temperature if used [K]'},
+#         'T_inlet': {'Value': 293, 'Description': 'Coolant inlet temperature [K]'},
+#         'fin_efficiency': {'Value': True, 'Description': 'Whether to consider fin efficiency'}
+#     },
+#     'nodes': {'Value': 100, 'Description': 'Number of axial nodes [-]'},
+#     'load point': {
+#         'p_c': {'Value': 925779.4962934465, 'Description': 'Chamber pressure [Pa]'},
+#         'ROF': {'Value': 0.92, 'Description': 'Oxidizer-to-fuel ratio [-]'},
+#         'm_dot': {'Value': 0.6222634347397111, 'Description': 'Mass flow rate [kg/s]'},
+#         'T_oxidizer': {'Value': 100, 'Description': 'Oxidizer injection temperature [K]'},
+#         'T_fuel': {'Value': 400, 'Description': 'Fuel injection temperature [K]'},
+#         'oxidizer': {'Value': 'O2', 'Description': 'Oxidizer chemical formula'},
+#         'fuel_cp': {'Value': 'C2H6O', 'Description': 'Fuel formula (CoolProp)'},
+#         'fuel_ct': {'Value': 'C2H5OH', 'Description': 'Fuel formula (Cantera)'}
+#     },
+#     'settings': {
+#         'direction': {'Value': 'counter', 'Description': 'Flow direction of coolant (co/counter)'},
+#         'thermal type': {'Value': 'fix', 'Description': '"fix" uses constant wall temperature'},
+#         'flow type': {
+#             'Types': ['frozen'],
+#             'Description': 'Frozen/equilibrium chemistry assumptions for flow'
+#         }
+#     }
+# }
 
 #%% Geometry and discretization
 
