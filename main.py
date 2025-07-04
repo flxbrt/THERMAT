@@ -74,17 +74,17 @@ config = {
         'l_star': {'Value': 2, 'Description': 'Characteristic Chamber Length [m]'},
         'alpha': {'Value': 45, 'Description': 'Half angle Convergent section [°]'},
         'beta': {'Value': 15, 'Description': 'Half angle Divergent section [°]'},
-        'epsilon_c': {'Value': 15.44, 'Description': 'Contraction Ratio [-]'},
-        'epsilon_e': {'Value': 3, 'Description': 'Expansion Ratio [-]'}
+        'epsilon_c': {'Value': 16.33, 'Description': 'Contraction Ratio [-]'},
+        'epsilon_e': {'Value': 2.87, 'Description': 'Expansion Ratio [-]'}
     },
     'cooling': {
         'N': {'Value': 50, 'Description': 'Number of channels [-]'},
         'h': {'Value': 0.8e-3, 'Description': 'Channel height [m]'},
         'tc': {'Value': 1.5e-3, 'Description': 'Wall thickness circumferentially [m]'},
         'tl': {'Value': 1e-3, 'Description': 'Wall thickness liner [m]'},
-        'lam': {'Value': 25, 'Description': 'Wall material thermal conductivity [W/m/K]'},
+        'lam': {'Value': 15, 'Description': 'Wall material thermal conductivity [W/m/K]'},
         'p_inlet': {'Value': 40e5, 'Description': 'Coolant inlet pressure [Pa]'},
-        'T_wall': {'Value': 700, 'Description': 'Fixed wall temperature if used [K]'},
+        'T_wall': {'Value': 300, 'Description': 'Fixed wall temperature if used [K]'},
         'T_inlet': {'Value': 293, 'Description': 'Coolant inlet temperature [K]'},
         'fin_efficiency': {'Value': True, 'Description': 'Whether to consider fin efficiency'}
     },
