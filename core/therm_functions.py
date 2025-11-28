@@ -407,7 +407,7 @@ def set_combustion(p, fuel_ct, fuel_cp, ox, T_fuel, T_ox, ROF):
     
     ref_t = 273
     
-    comb = ct.Solution('gri30_WARR.yaml')
+    comb = ct.Solution('gri30_marinov.yaml')
     # comb = ct.Solution('gri30_WARR.yaml')
     comb.Y = {fuel_ct: 1, ox: ROF}
     comb.TP = 273, p

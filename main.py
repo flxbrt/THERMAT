@@ -101,7 +101,7 @@ config = {
     },
     'settings': {
         'direction': {'Value': 'counter', 'Description': 'Flow direction of coolant (co/counter)'},
-        'thermal type': {'Value': 'fix', 'Description': '"fix" uses constant wall temperature'},
+        'thermal type': {'Value': 'regen', 'Description': '"fix" uses constant wall temperature'},
         'flow type': {
             'Types': ['frozen'],
             'Description': 'Frozen/equilibrium chemistry assumptions for flow'
